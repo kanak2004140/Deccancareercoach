@@ -23,21 +23,7 @@ const NODE_ENV = process.env.NODE_ENV || 'development';
 // ✅ FIXED CORS (FINAL)
 // ======================
 app.use(cors({
-  origin: function (origin, callback) {
-    const allowed = process.env.CORS_ORIGIN?.split(',') || [];
-
-    // Allow requests with no origin (Postman, mobile apps)
-    if (!origin) return callback(null, true);
-
-    // Allow if origin matches
-    if (allowed.includes(origin)) {
-      return callback(null, true);
-    }
-
-    // ❗ Do NOT throw error (prevents crash & CORS issues)
-    console.warn("Blocked by CORS:", origin);
-    return callback(null, false);
-  },
+  origin: true,
   credentials: true
 }));
 
