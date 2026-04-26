@@ -21,7 +21,7 @@ const NODE_ENV = process.env.NODE_ENV || 'development';
 
 // Middleware
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+  origin: process.env.CORS_ORIGIN?.split(',') || '*',
   credentials: true
 }));
 app.use(express.json({ limit: '50mb' }));
