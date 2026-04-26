@@ -21,12 +21,16 @@ const NODE_ENV = process.env.NODE_ENV || 'development';
 
 // Middleware
 app.use(cors({
-  origin: (origin, callback) => {
+  origin: function (origin, callback) {
     const allowed = process.env.CORS_ORIGIN?.split(',') || [];
-    if (!origin || allowed.includes(origin)) {
+
+    // allow requests with no origin (like Postman)
+    if (!origin) return callback(null, true);
+
+    if (allowed.includes(origin)) {
       callback(null, true);
     } else {
-      callback(new Error("CORS blocked"));
+      callback(new Error("CORS blocked: " + origin));
     }
   },
   credentials: true
