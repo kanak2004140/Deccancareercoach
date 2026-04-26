@@ -19,22 +19,29 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
-// Middleware
+// ======================
+// ✅ FIXED CORS (FINAL)
+// ======================
 app.use(cors({
   origin: function (origin, callback) {
     const allowed = process.env.CORS_ORIGIN?.split(',') || [];
 
-    // allow requests with no origin (like Postman)
+    // Allow requests with no origin (Postman, mobile apps)
     if (!origin) return callback(null, true);
 
+    // Allow if origin matches
     if (allowed.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("CORS blocked: " + origin));
+      return callback(null, true);
     }
+
+    // ❗ Do NOT throw error (prevents crash & CORS issues)
+    console.warn("Blocked by CORS:", origin);
+    return callback(null, false);
   },
   credentials: true
 }));
+
+// Middleware
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
@@ -80,12 +87,10 @@ app.use((req, res) => {
   });
 });
 
-// Start server with error handling
+// Start server
 const server = app.listen(PORT, () => {
-  console.log(`✅ Server running on http://localhost:${PORT}`);
+  console.log(`✅ Server running on port ${PORT}`);
   console.log(`📝 Environment: ${NODE_ENV}`);
-  console.log(`🔗 API Base URL: http://localhost:${PORT}/api`);
-  console.log(`🏥 Health Check: http://localhost:${PORT}/api/health`);
 });
 
 // Handle server errors
@@ -106,6 +111,6 @@ process.on('uncaughtException', (error) => {
 
 // Handle unhandled rejections
 process.on('unhandledRejection', (reason, promise) => {
-  console.error('❌ Unhandled Rejection at:', promise, 'reason:', reason);
+  console.error('❌ Unhandled Rejection:', reason);
   process.exit(1);
 });
