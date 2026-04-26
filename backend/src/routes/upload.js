@@ -10,19 +10,21 @@ const __dirname = path.dirname(__filename);
 
 const router = express.Router();
 
-// Configure storage
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const uploadsDir = path.join(__dirname, '../../uploads');
-    if (!fs.existsSync(uploadsDir)) {
-      fs.mkdirSync(uploadsDir, { recursive: true });
-    }
-    cb(null, uploadsDir);
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`);
-  }
-});
+// Use memory storage in production, disk storage in development
+const storage = process.env.NODE_ENV === 'production' 
+  ? multer.memoryStorage()
+  : multer.diskStorage({
+      destination: (req, file, cb) => {
+        const uploadsDir = path.join(__dirname, '../../uploads');
+        if (!fs.existsSync(uploadsDir)) {
+          fs.mkdirSync(uploadsDir, { recursive: true });
+        }
+        cb(null, uploadsDir);
+      },
+      filename: (req, file, cb) => {
+        cb(null, `${Date.now()}-${file.originalname}`);
+      }
+    });
 
 const upload = multer({
   storage,
@@ -46,16 +48,25 @@ router.post('/resume', upload.single('resume'), (req, res) => {
       return res.status(400).json({ error: 'No file uploaded' });
     }
 
-    const resumeText = extractResumeText(req.file.path);
+    let resumeText;
+    
+    // Handle both memory and disk storage
+    if (process.env.NODE_ENV === 'production') {
+      // Memory storage - use buffer
+      resumeText = extractResumeText(req.file.buffer);
+    } else {
+      // Disk storage - use file path
+      resumeText = extractResumeText(req.file.path);
+    }
     
     res.json({
       success: true,
-      filename: req.file.filename,
-      filepath: req.file.path,
+      filename: req.file.originalname,
       text: resumeText.substring(0, 5000), // Return first 5000 chars
       message: 'Resume uploaded successfully'
     });
   } catch (error) {
+    console.error('Resume upload error:', error);
     res.status(500).json({ error: error.message });
   }
 });

@@ -6,13 +6,22 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 /**
- * Extract text from resume (simple text extraction)
- * In production, use pdf-parse for PDFs
+ * Extract text from resume
+ * Handles both file paths (development) and buffers (production with memory storage)
  */
-export const extractResumeText = (filePath) => {
+export const extractResumeText = (filePathOrBuffer) => {
   try {
-    const content = fs.readFileSync(filePath, 'utf8');
-    return content;
+    let content;
+    
+    // Handle buffer object (from memory storage in production)
+    if (Buffer.isBuffer(filePathOrBuffer)) {
+      content = filePathOrBuffer.toString('utf8');
+    } else {
+      // Handle file path (from disk storage in development)
+      content = fs.readFileSync(filePathOrBuffer, 'utf8');
+    }
+    
+    return content || '';
   } catch (error) {
     console.error('Error reading resume:', error);
     return '';
