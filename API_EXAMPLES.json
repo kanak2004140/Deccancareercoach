@@ -1,0 +1,198 @@
+{
+  "title": "API Response Examples",
+  "description": "Sample responses from the Deccan Career Coach API",
+  "endpoints": [
+    {
+      "method": "POST",
+      "path": "/api/assessment/initialize",
+      "description": "Initialize assessment with resume and job description",
+      "request": {
+        "resumeText": "Senior Full Stack Developer\n\nSkills: JavaScript, React, Node.js, MongoDB, AWS, Docker\n\nExperience: 5 years building scalable web applications, led teams of developers, optimized performance by 40%",
+        "jdText": "Senior Full Stack Developer\n\nRequired Skills:\n- JavaScript/TypeScript\n- React.js\n- Node.js\n- MongoDB\n- Docker\n- AWS\n- REST APIs"
+      },
+      "response": {
+        "sessionId": "1712345678901",
+        "requiredSkills": [
+          "JavaScript",
+          "React",
+          "Node.js",
+          "MongoDB",
+          "Docker",
+          "AWS",
+          "REST APIs"
+        ],
+        "existingSkills": [
+          "JavaScript",
+          "React",
+          "Node.js",
+          "MongoDB",
+          "Docker",
+          "AWS"
+        ],
+        "skillGaps": [
+          "REST APIs"
+        ],
+        "totalSkills": 7,
+        "gapCount": 1
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/assessment/questions",
+      "description": "Get assessment questions for a specific skill",
+      "request": {
+        "sessionId": "1712345678901",
+        "skill": "React"
+      },
+      "response": {
+        "skill": "React",
+        "proficiency": "Advanced",
+        "questions": [
+          {
+            "id": 1,
+            "question": "Explain React component lifecycle and when to use each lifecycle method",
+            "skill": "React"
+          },
+          {
+            "id": 2,
+            "question": "How would you optimize a React component that renders frequently? Explain memoization techniques",
+            "skill": "React"
+          },
+          {
+            "id": 3,
+            "question": "What is the difference between useCallback and useMemo? When would you use each?",
+            "skill": "React"
+          },
+          {
+            "id": 4,
+            "question": "How do you handle state management in large React applications?",
+            "skill": "React"
+          },
+          {
+            "id": 5,
+            "question": "Explain concurrent features in React 18 and their benefits",
+            "skill": "React"
+          }
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/assessment/submit-answer",
+      "description": "Submit answer for assessment question",
+      "request": {
+        "sessionId": "1712345678901",
+        "skill": "React",
+        "answer": "React components go through several lifecycle phases: mounting (constructor, render, componentDidMount), updating (render, componentDidUpdate), and unmounting (componentWillUnmount). You should use componentDidMount for side effects, componentDidUpdate for reacting to props changes, and componentWillUnmount for cleanup. For optimization, you can use React.memo for function components and shouldComponentUpdate for class components to prevent unnecessary re-renders.",
+        "questionId": 1
+      },
+      "response": {
+        "score": 8,
+        "probability": 0.87,
+        "feedback": "Excellent understanding of React lifecycle methods. You covered the main phases and use cases well. Consider mentioning new hooks-based approaches for comprehensive coverage.",
+        "skillAverageScore": 7.8,
+        "responseCount": 2
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/assessment/results",
+      "description": "Get final assessment results and learning plan",
+      "request": {
+        "sessionId": "1712345678901"
+      },
+      "response": {
+        "sessionId": "1712345678901",
+        "skillScores": [
+          {
+            "skill": "JavaScript",
+            "score": 9,
+            "probability": 0.95,
+            "assessmentCount": 5
+          },
+          {
+            "skill": "React",
+            "score": 8,
+            "probability": 0.87,
+            "assessmentCount": 5
+          },
+          {
+            "skill": "Node.js",
+            "score": 7,
+            "probability": 0.78,
+            "assessmentCount": 5
+          },
+          {
+            "skill": "MongoDB",
+            "score": 7,
+            "probability": 0.75,
+            "assessmentCount": 5
+          },
+          {
+            "skill": "Docker",
+            "score": 6,
+            "probability": 0.65,
+            "assessmentCount": 5
+          },
+          {
+            "skill": "AWS",
+            "score": 5,
+            "probability": 0.58,
+            "assessmentCount": 5
+          },
+          {
+            "skill": "REST APIs",
+            "score": 0,
+            "probability": 0.0,
+            "assessmentCount": 0
+          }
+        ],
+        "skillGaps": [
+          "REST APIs"
+        ],
+        "requiredSkills": [
+          "JavaScript",
+          "React",
+          "Node.js",
+          "MongoDB",
+          "Docker",
+          "AWS",
+          "REST APIs"
+        ],
+        "learningPlan": [
+          {
+            "skill": "REST APIs",
+            "priority": 1,
+            "timeToLearn": "2-3 weeks",
+            "resources": [
+              {
+                "type": "Course",
+                "name": "REST API Design Best Practices",
+                "url": "https://www.udemy.com",
+                "time": "12h"
+              },
+              {
+                "type": "Docs",
+                "name": "Express.js API Guide",
+                "url": "https://expressjs.com",
+                "time": "Self-paced"
+              },
+              {
+                "type": "Tutorial",
+                "name": "Building REST APIs with Node.js",
+                "url": "https://youtube.com",
+                "time": "4h"
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "totalSkillsAssessed": 7,
+          "skillsWithGaps": 1,
+          "averageScore": 7,
+          "estimatedLearningTime": "2-3 weeks"
+        }
+      }
+    }
+  ]
+}

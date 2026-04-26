@@ -1,0 +1,28 @@
+{
+  "name": "deccan-career-coach",
+  "version": "1.0.0",
+  "description": "AI-powered Skill Assessment & Personalized Learning Plan Agent",
+  "private": true,
+  "scripts": {
+    "dev:backend": "cd backend && npm install && npm start",
+    "dev:frontend": "cd frontend && npm install && npm run dev",
+    "install:all": "cd backend && npm install && cd ../frontend && npm install",
+    "build:backend": "cd backend && npm install",
+    "build:frontend": "cd frontend && npm install && npm run build",
+    "test": "echo 'Run tests in respective folders'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/deccan-career-coach"
+  },
+  "keywords": [
+    "ai",
+    "career",
+    "assessment",
+    "skill",
+    "learning",
+    "personalized"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+}
